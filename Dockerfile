@@ -8,8 +8,11 @@ RUN pip install uv
 COPY . ./
 
 RUN uv pip install --system -e .
-RUN chmod +x entrypoint.py
 
 ENV PYTHONPATH=/app/src:$PYTHONPATH
 
-ENTRYPOINT ["uv", "run", "./entrypoint.py"]
+# Expose the API port
+EXPOSE 8000
+
+# Run the FastAPI server by default
+CMD ["uvicorn", "mcp_massive.api:app", "--host", "0.0.0.0", "--port", "8000"]

@@ -1,13 +1,16 @@
 [project]
 name = "mcp_massive"
 version = "0.7.0"
-description = "A MCP server project"
+description = "MCP server and REST API for Massive.com financial data"
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
     "mcp[cli]>=1.15.0",
     "massive>=2.0.1",
     "python-dotenv>=1.2.0",
+    "fastapi>=0.115.0",
+    "uvicorn[standard]>=0.32.0",
+    "pydantic>=2.0.0",
 ]
 [[project.authors]]
 name = "Massive"
@@ -26,3 +29,4 @@ dev = [
 
 [project.scripts]
 mcp_massive = "mcp_massive:main"
+mcp_massive_api = "mcp_massive.api:run_api"
