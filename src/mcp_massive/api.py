@@ -595,6 +595,88 @@ async def list_inflation(
         return error_response(str(e))
 
 
+# ==================== Ratios ====================
+
+@app.get("/api/ratios", response_model=ApiResponse)
+async def list_ratios(
+    ticker: Optional[str] = None,
+    cik: Optional[str] = None,
+    price_gt: Optional[float] = None,
+    price_gte: Optional[float] = None,
+    price_lt: Optional[float] = None,
+    price_lte: Optional[float] = None,
+    market_cap_gt: Optional[float] = None,
+    market_cap_gte: Optional[float] = None,
+    market_cap_lt: Optional[float] = None,
+    market_cap_lte: Optional[float] = None,
+    price_to_earnings_gt: Optional[float] = None,
+    price_to_earnings_gte: Optional[float] = None,
+    price_to_earnings_lt: Optional[float] = None,
+    price_to_earnings_lte: Optional[float] = None,
+    price_to_book_gt: Optional[float] = None,
+    price_to_book_gte: Optional[float] = None,
+    price_to_book_lt: Optional[float] = None,
+    price_to_book_lte: Optional[float] = None,
+    dividend_yield_gt: Optional[float] = None,
+    dividend_yield_gte: Optional[float] = None,
+    dividend_yield_lt: Optional[float] = None,
+    dividend_yield_lte: Optional[float] = None,
+    return_on_equity_gt: Optional[float] = None,
+    return_on_equity_gte: Optional[float] = None,
+    return_on_equity_lt: Optional[float] = None,
+    return_on_equity_lte: Optional[float] = None,
+    debt_to_equity_gt: Optional[float] = None,
+    debt_to_equity_gte: Optional[float] = None,
+    debt_to_equity_lt: Optional[float] = None,
+    debt_to_equity_lte: Optional[float] = None,
+    limit: int = Query(10, le=1000),
+    sort: Optional[str] = None,
+):
+    """
+    Retrieve financial ratios for stocks including P/E, P/B, dividend yield, ROE, debt-to-equity.
+    Use comparison operators to filter by ratio values.
+    """
+    try:
+        results = massive_client.list_ratios(
+            ticker=ticker,
+            cik=cik,
+            price_gt=price_gt,
+            price_gte=price_gte,
+            price_lt=price_lt,
+            price_lte=price_lte,
+            market_cap_gt=market_cap_gt,
+            market_cap_gte=market_cap_gte,
+            market_cap_lt=market_cap_lt,
+            market_cap_lte=market_cap_lte,
+            price_to_earnings_gt=price_to_earnings_gt,
+            price_to_earnings_gte=price_to_earnings_gte,
+            price_to_earnings_lt=price_to_earnings_lt,
+            price_to_earnings_lte=price_to_earnings_lte,
+            price_to_book_gt=price_to_book_gt,
+            price_to_book_gte=price_to_book_gte,
+            price_to_book_lt=price_to_book_lt,
+            price_to_book_lte=price_to_book_lte,
+            dividend_yield_gt=dividend_yield_gt,
+            dividend_yield_gte=dividend_yield_gte,
+            dividend_yield_lt=dividend_yield_lt,
+            dividend_yield_lte=dividend_yield_lte,
+            return_on_equity_gt=return_on_equity_gt,
+            return_on_equity_gte=return_on_equity_gte,
+            return_on_equity_lt=return_on_equity_lt,
+            return_on_equity_lte=return_on_equity_lte,
+            debt_to_equity_gt=debt_to_equity_gt,
+            debt_to_equity_gte=debt_to_equity_gte,
+            debt_to_equity_lt=debt_to_equity_lt,
+            debt_to_equity_lte=debt_to_equity_lte,
+            limit=limit,
+            sort=sort,
+            raw=True,
+        )
+        return success_response(json_to_csv(results.data.decode("utf-8")))
+    except Exception as e:
+        return error_response(str(e))
+
+
 def run_api(host: str = "0.0.0.0", port: int = 8000):
     """Run the FastAPI server."""
     import uvicorn
